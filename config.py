@@ -1,2 +1,7 @@
-BOT_TOKEN = "ВАШ_ТОКЕН"
-ADMIN_ID = 123456789  # Заменить на ваш Telegram ID
+import os
+
+# Токен от @BotFather
+BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+# ID администратора (ваш Telegram ID)
+ADMIN_ID = int(os.getenv("ADMIN_ID"))
