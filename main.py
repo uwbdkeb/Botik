@@ -1,4 +1,5 @@
 from telegram.ext import Application
+from config import BOT_TOKEN
 
 def main():
     app = Application.builder().token(BOT_TOKEN).build()
