@@ -10,9 +10,13 @@ async def start(update: Update, context):
     db.close()
 
     if user:
+        # Проверяем является ли пользователь настоящим админом
+        from config import ADMIN_ID
+        is_admin = (update.effective_user.id == ADMIN_ID)
+        
         await update.message.reply_text(
             f"Добро пожаловать, {user.name}!",
-            reply_markup=get_admin_menu() if user.role == "admin" else get_driver_menu()
+            reply_markup=get_admin_menu() if is_admin else get_driver_menu()
         )
         context.user_data.clear()
     else:
@@ -35,9 +39,13 @@ async def handle_contact(update: Update, context):
     user.telegram_id = update.effective_user.id
     db.commit()
     db.close()
+    # Проверяем является ли пользователь настоящим админом
+    from config import ADMIN_ID
+    is_admin = (update.effective_user.id == ADMIN_ID)
+    
     await update.message.reply_text(
         f"Добро пожаловать, {user.name}!",
-        reply_markup=get_admin_menu() if user.role == "admin" else get_driver_menu()
+        reply_markup=get_admin_menu() if is_admin else get_driver_menu()
     )
     context.user_data.clear()
 
