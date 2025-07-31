@@ -22,23 +22,24 @@ async def start(update: Update, context):
         db.commit()
         user = admin_user
     
-    db.close()
-
     if user:
+        # Получаем данные пользователя до закрытия сессии
+        user_name = user.name
         # Проверяем является ли пользователь настоящим админом
         is_admin = (update.effective_user.id == ADMIN_ID)
         
+        db.close()
+        
         await update.message.reply_text(
-            f"Добро пожаловать, {user.name}!",
+            f"Добро пожаловать, {user_name}!",
             reply_markup=get_admin_menu() if is_admin else get_driver_menu()
         )
         context.user_data.clear()
     else:
+        db.close()
         await update.message.reply_text(
             "Отправьте номер для входа:",
             reply_markup=get_phone_button()
-        )
-        context.user_data["state"] = WAITING_PHONErkup=get_phone_button()
         )
         context.user_data["state"] = WAITING_PHONE
 
@@ -54,13 +55,15 @@ async def handle_contact(update: Update, context):
         return
     user.telegram_id = update.effective_user.id
     db.commit()
+    # Получаем имя пользователя до закрытия сессии
+    user_name = user.name
     db.close()
     # Проверяем является ли пользователь настоящим админом
     from config import ADMIN_ID
     is_admin = (update.effective_user.id == ADMIN_ID)
     
     await update.message.reply_text(
-        f"Добро пожаловать, {user.name}!",
+        f"Добро пожаловать, {user_name}!",
         reply_markup=get_admin_menu() if is_admin else get_driver_menu()
     )
     context.user_data.clear()
