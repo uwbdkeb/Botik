@@ -1,3 +1,4 @@
+
 from telegram import ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton
 
 def get_phone_button():
@@ -23,6 +24,15 @@ def get_admin_menu():
     )
 
 def get_car_keyboard(cars):
-    return InlineKeyboardMarkup([
-        [InlineKeyboardButton(f"🚗 {c.number}", callback_data=f"car_{c.id}")] for c in cars
-    ])
+    keyboard = []
+    for car in cars:
+        keyboard.append([f"🚗 {car.brand} {car.model} ({car.number})"])
+    return ReplyKeyboardMarkup(keyboard, resize_keyboard=True)
+
+def get_admin_inline_keyboard():
+    keyboard = [
+        [InlineKeyboardButton("👥 Управление водителями", callback_data="manage_drivers")],
+        [InlineKeyboardButton("🚗 Управление машинами", callback_data="manage_cars")],
+        [InlineKeyboardButton("📊 Статистика", callback_data="admin_stats")]
+    ]
+    return InlineKeyboardMarkup(keyboard)
