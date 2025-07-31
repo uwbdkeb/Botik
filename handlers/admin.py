@@ -124,6 +124,31 @@ async def admin_stats(update, context):
         await update.callback_query.answer("❌ Нет прав доступа")
         return
         
+    await update.callback_query.answer()
+    
+    db = SessionLocal()
+    users_count = db.query(User).count()
+    cars_count = db.query(Car).count()
+    drivers_count = db.query(User).filter(User.role == "driver").count()
+    db.close()
+    
+    text = f"📊 Статистика:\n\n"
+    text += f"👥 Всего пользователей: {users_count}\n"
+    text += f"🚗 Всего машин: {cars_count}\n"
+    text += f"🚛 Водителей: {drivers_count}\n"
+    
+    keyboard = [[InlineKeyboardButton("🔙 Назад", callback_data="admin_panel")]]
+    await update.callback_query.edit_message_text(
+        text,
+        reply_markup=InlineKeyboardMarkup(keyboard)
+    )
+
+async def handle_admin_text(update, context):
+    # Эта функция обрабатывает текстовые сообщения для админ-панели
+    # Пока что просто игнорируем их
+    passрав доступа")
+        return
+        
     db = SessionLocal()
     drivers_count = db.query(User).filter(User.role == "driver").count()
     cars_count = db.query(Car).count()
@@ -140,5 +165,3 @@ async def admin_stats(update, context):
 async def handle_admin_text(update, context):
     # Обработка текстовых сообщений в админ-панели
     await update.message.reply_text("Используйте кнопки для навигации по админ-панели.")
-
-
