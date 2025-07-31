@@ -1,3 +1,4 @@
+
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackQueryHandler
 from config import BOT_TOKEN
 from handlers.auth import start, handle_contact, create_admin
@@ -9,7 +10,6 @@ from handlers.admin import (admin_panel, manage_drivers, manage_cars,
 from handlers.chat import chat
 from handlers.parking import parking_check
 from handlers.report import report
-
 
 def main():
     app = Application.builder().token(BOT_TOKEN).build()
@@ -44,7 +44,6 @@ def main():
 
     print("Бот запущен!")
     app.run_polling()
-
 
 if __name__ == "__main__":
     main()
