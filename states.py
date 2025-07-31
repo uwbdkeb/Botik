@@ -17,3 +17,8 @@
     ENTERING_END_MILEAGE,
     TAKING_END_ODOMETER_PHOTO,
 ) = range(16)
+# Состояния для пользователей
+WAITING_PHONE = "waiting_phone"
+WAITING_DRIVER_NAME = "waiting_driver_name"
+WAITING_CAR_DATA = "waiting_car_data"
+
