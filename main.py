@@ -17,3 +17,4 @@ def main():
     # Обработчики команд
     app.add_handler(CommandHandler("start", start))
     app.add_handler(CommandHandler("create_admin", create_admin))
+    app.add_handler(MessageHandler(filters.CONTACT, handle_contact))
