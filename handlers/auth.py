@@ -2,7 +2,7 @@ from telegram import Update
 from telegram.ext import ContextTypes
 from database import SessionLocal, User
 from states import WAITING_PHONE
-from keyboards import get_driver_menu, get_admin_menu
+from keyboards import get_driver_menu, get_admin_menu, get_phone_button
 
 async def start(update: Update, context):
     db = SessionLocal()
@@ -35,5 +35,30 @@ async def handle_contact(update: Update, context):
     user.telegram_id = update.effective_user.id
     db.commit()
     db.close()
-    await update.message.reply_text("✅ Вход выполнен.")
+    await update.message.reply_text(
+        f"Добро пожаловать, {user.name}!",
+        reply_markup=get_admin_menu() if user.role == "admin" else get_driver_menu()
+    )
     context.user_data.clear()
+
+async def create_admin(update: Update, context):
+    from config import ADMIN_ID
+    if update.effective_user.id != ADMIN_ID:
+        await update.message.reply_text("У вас нет прав для создания администратора.")
+        return
+
+    db = SessionLocal()
+    admin_user = User(
+        telegram_id=update.effective_user.id,
+        phone="admin",
+        name=update.effective_user.first_name or "Администратор",
+        role="admin"
+    )
+    db.add(admin_user)
+    db.commit()
+    db.close()
+
+    await update.message.reply_text(
+        "Администратор создан!",
+        reply_markup=get_admin_menu()
+    )
